@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NXTGEN Care Hospital Portal</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+body{
+font-family:'Poppins',sans-serif;
+background:linear-gradient(to right,#e0f7fa,#ffffff);
+}
+
+.navbar{
+background:linear-gradient(90deg,#0aa5a5,#007c7c);
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand{
+font-size:22px;
+letter-spacing:1px;
+}
+
+.hero{
+padding:90px;
+text-align:center;
+background:linear-gradient(120deg,#dfffff,#ffffff);
+border-bottom:1px solid #eee;
+}
+
+.hero h1{
+font-weight:600;
+}
+
+.card{
+margin-top:20px;
+border:none;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+.hidden{
+display:none;
+}
+
+input,select,textarea{
+border-radius:8px !important;
+}
+
+button{
+border-radius:8px !important;
+}
+
+.dashboard{
+padding:40px;
+}
+
+.doctor-img{
+width:100%;
+height:200px;
+object-fit:cover;
+border-top-left-radius:12px;
+border-top-right-radius:12px;
+}
+
+.table{
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.qr{
+width:200px;
+margin-top:20px;
+border:6px solid white;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+border-radius:10px;
+}
+
+h2,h4{
+font-weight:600;
+}
+
+.card, .btn, input, select, textarea{
+transition:all 0.3s ease;
+}
+
+input:focus,select:focus,textarea:focus{
+box-shadow:0 0 8px rgba(0,165,165,0.3);
+border-color:#0aa5a5;
+}
+
+.btn{
+padding:8px 18px;
+}
+
+footer{
+background:#0aa5a5;
+color:white;
+margin-top:60px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark navbar-expand-lg">
+
+<div class="container">
+
+<a class="navbar-brand text-white fw-bold">NXTGEN Care</a>
+
+<div>
+<button class="btn btn-light" onclick="showLogin()">Login</button>
+<button class="btn btn-dark" onclick="showRegister()">Create Account</button>
+</div>
+
+</div>
+
+</nav>
+
+<div id="homePage">
+
+<section class="hero">
+
+<h1>Welcome to NXTGEN Care</h1>
+<p>Next Generation Digital Healthcare Portal</p>
+<h4>Emergency 📞 108</h4>
+
+</section>
+
+<div class="container">
+
+<h2 class="mt-5 text-center fw-bold">Our Digital Healthcare Services</h2>
+
+<div class="row">
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>Appointment Booking</h5>
+<p>Book doctor appointments instantly online.</p>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>Medicine Delivery</h5>
+<p>Upload prescriptions and get medicines delivered.</p>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>Lab Test Booking</h5>
+<p>Schedule lab tests from the comfort of your home.</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="loginPage" class="container hidden">
+
+<h2 class="mt-5">Login to NXTGEN Care</h2>
+
+<input id="loginPhone" class="form-control mt-3" placeholder="Phone Number">
+<input id="loginPass" type="password" class="form-control mt-3" placeholder="Password">
+
+<button class="btn btn-info mt-3" onclick="login()">Login</button>
+
+<p class="mt-3">No account? <a href="#" onclick="showRegister()">Create Account</a></p>
+
+</div>
+
+<div id="registerPage" class="container hidden">
+
+<h2 class="mt-5">Create NXTGEN Care Account</h2>
+
+<input id="name" class="form-control mt-2" placeholder="Full Name">
+<input id="dob" type="date" class="form-control mt-2">
+
+<select id="gender" class="form-control mt-2">
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+</select>
+
+<input id="phone" class="form-control mt-2" placeholder="Phone Number">
+<input id="email" class="form-control mt-2" placeholder="Email">
+<input id="city" class="form-control mt-2" placeholder="City">
+<input id="password" type="password" class="form-control mt-2" placeholder="Password">
+
+<button class="btn btn-success mt-3" onclick="sendOTP()">Submit</button>
+
+</div>
+
+<div id="otpPage" class="container hidden">
+
+<h2 class="mt-5">OTP Verification</h2>
+
+<p>Enter OTP sent to your phone</p>
+
+<input id="otpInput" class="form-control">
+
+<button class="btn btn-primary mt-3" onclick="verifyOTP()">Verify OTP</button>
+
+</div>
+
+<div id="dashboard" class="container dashboard hidden">
+
+<h2>NXTGEN Care Dashboard</h2>
+
+<button class="btn btn-danger float-end" onclick="logout()">Logout</button>
+
+<h4 class="mt-4">Book Appointment</h4>
+
+<input id="patientName" class="form-control mt-2" placeholder="Patient Name">
+<input id="age" class="form-control mt-2" placeholder="Age">
+
+<select id="dept" class="form-control mt-2">
+<option>Cardiology</option>
+<option>Dermatology</option>
+<option>Neurology</option>
+<option>Orthopedics</option>
+<option>Gynecology</option>
+<option>Physiotherapy</option>
+<option>Psychology</option>
+</select>
+
+<input id="date" type="date" class="form-control mt-2">
+<input id="time" type="time" class="form-control mt-2">
+
+<textarea id="symptoms" class="form-control mt-2" placeholder="Symptoms"></textarea>
+
+<button class="btn btn-info mt-3" onclick="bookAppointment()">Book Appointment</button>
+
+<h4 class="mt-5">Top Doctors</h4>
+
+<div class="row">
+
+<div class="col-md-3">
+<div class="card">
+<img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2" class="doctor-img">
+<div class="card-body"><h5>Dr. Raj - Neurologist</h5></div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card">
+<img src="https://images.unsplash.com/photo-1580281657527-47d9a3f4b7c1" class="doctor-img">
+<div class="card-body"><h5>Dr. Priya - Gynecologist</h5></div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card">
+<img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7" class="doctor-img">
+<div class="card-body"><h5>Dr. Kumar - Orthopedic</h5></div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581595219315-a187dd40c322" class="doctor-img">
+<div class="card-body"><h5>Dr. Anita - Physiotherapist</h5></div>
+</div>
+</div>
+
+</div>
+
+<h4 class="mt-5">Medicine Order</h4>
+
+<input type="file" id="prescription" class="form-control">
+<input id="address" class="form-control mt-2" placeholder="Delivery Address">
+
+<button class="btn btn-warning mt-2" onclick="submitMedicine()">Submit Prescription</button>
+
+<h4 class="mt-5">Billing</h4>
+
+<table class="table">
+
+<tr>
+<th>Bill ID</th>
+<th>Amount</th>
+<th>Status</th>
+<th>Receipt</th>
+</tr>
+
+<tr>
+<td>101</td>
+<td>₹1500</td>
+<td>Paid</td>
+<td><button class="btn btn-success btn-sm" onclick="downloadReceipt()">Download</button></td>
+</tr>
+
+<tr>
+<td>102</td>
+<td>₹850</td>
+<td id="billStatus">Pending <button class="btn btn-sm btn-primary" onclick="payBill()">Pay Now</button></td>
+<td><button class="btn btn-success btn-sm" onclick="downloadReceipt()">Download</button></td>
+</tr>
+
+</table>
+
+<div id="qrSection" class="hidden">
+
+<h5>Scan to Pay</h5>
+
+<img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=nxtgencare@upi&pn=NXTGENCare&am=850&cu=INR">
+
+</div>
+
+</div>
+
+<footer class="text-center p-4">
+<p>© 2026 NXTGEN Care Hospital Portal</p>
+<p>Next Generation Digital Healthcare</p>
+</footer>
+
+<script>
+
+let generatedOTP;
+
+function hideAll(){
+homePage.classList.add("hidden");
+loginPage.classList.add("hidden");
+registerPage.classList.add("hidden");
+otpPage.classList.add("hidden");
+dashboard.classList.add("hidden");
+}
+
+function showLogin(){ hideAll(); loginPage.classList.remove("hidden"); }
+
+function showRegister(){ hideAll(); registerPage.classList.remove("hidden"); }
+
+function sendOTP(){
+generatedOTP=Math.floor(1000+Math.random()*9000);
+alert("Simulated OTP: "+generatedOTP);
+hideAll();
+otpPage.classList.remove("hidden");
+}
+
+function verifyOTP(){
+let entered=document.getElementById("otpInput").value;
+if(entered==generatedOTP){
+alert("Account created successfully!");
+hideAll();
+dashboard.classList.remove("hidden");
+}else{ alert("Incorrect OTP"); }
+}
+
+function login(){
+let phone=document.getElementById("loginPhone").value;
+let pass=document.getElementById("loginPass").value;
+if(phone && pass){ hideAll(); dashboard.classList.remove("hidden"); }
+else{ alert("Enter valid credentials"); }
+}
+
+function bookAppointment(){
+alert("Appointment booked successfully at NXTGEN Care!");
+}
+
+function payBill(){
+
+let method=prompt("Choose Payment Method:\n1. UPI\n2. NetBanking");
+
+if(method=="1"){
+
+document.getElementById("qrSection").classList.remove("hidden");
+
+let upi=prompt("Enter your UPI ID");
+
+if(upi){
+
+window.location.href="upi://pay?pa="+upi+"&pn=NXTGENCare&am=850&cu=INR";
+
+setTimeout(function(){
+document.getElementById("billStatus").innerHTML="Paid";
+alert("Payment Successful");
+},2000);
+
+}
+
+}
+
+else if(method=="2"){
+
+let acc=prompt("Enter Account Number");
+let ifsc=prompt("Enter IFSC");
+let bank=prompt("Enter Bank Name");
+
+if(acc && ifsc && bank){
+
+alert("Processing Netbanking Payment...");
+
+setTimeout(function(){
+document.getElementById("billStatus").innerHTML="Paid";
+alert("Payment Successful");
+},2000);
+
+}
+
+}
+
+}
+
+function downloadReceipt(){
+
+const {jsPDF}=window.jspdf;
+let doc=new jsPDF();
+
+doc.text("NXTGEN Care Hospital",20,20);
+doc.text("Bill Receipt",20,40);
+doc.text("Amount Paid: ₹850",20,60);
+doc.text("Status: Paid",20,80);
+
+doc.save("receipt.pdf");
+
+}
+
+function submitMedicine(){
+
+let file=document.getElementById("prescription").files.length;
+let address=document.getElementById("address").value;
+
+if(file==0){ alert("Please upload prescription"); return; }
+if(address==""){ alert("Please enter delivery address"); return; }
+
+alert("Prescription received. Order confirmed.");
+
+}
+
+function logout(){
+hideAll();
+homePage.classList.remove("hidden");
+}
+
+</script>
+
+</body>
+</html>
